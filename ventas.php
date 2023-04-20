@@ -80,7 +80,6 @@ foreach($SumSodas as $SumSoda){
 					</td>
 					<td><?php echo $venta->total ?></td>
 					<td><a class="btn btn-info" href="<?php echo "imprimirTicket.php?id=" . $venta->id?>"><i class="fa fa-print"></i></a></td>
-					<td style='display:none;'><a class="btn btn-danger" href="<?php echo "eliminarVenta.php?id=" . $venta->id?>"><i class="fa fa-trash"></i></a></td>
 				</tr>
 				<?php } ?>
 			</tbody>
