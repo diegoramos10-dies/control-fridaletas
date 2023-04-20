@@ -31,8 +31,8 @@ left: 0px;
 					<th>Precio de compra</th>
 					<th>Precio de venta</th>
 					<th>Existencia</th>
-					<th style='display:none;'>Editar</th>
-					<th style='display:none;'>Eliminar</th>
+					<th>Editar</th>
+					<th>Eliminar</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -45,7 +45,7 @@ left: 0px;
 					<td><?php echo $producto->precioVenta ?></td>
 					<td><?php echo $producto->existencia ?></td>
 					<td><a class="btn btn-warning" href="<?php echo "editar.php?id=" . $producto->id?>"><i class="fa fa-edit"></i></a></td>
-					<td style='display:none;'><a class="btn btn-danger" href="<?php echo "eliminar.php?id=" . $producto->id?>"><i class="fa fa-trash"></i></a></td>
+					<td><a class="btn btn-danger" href="<?php echo "eliminar.php?id=" . $producto->id?>"><i class="fa fa-trash"></i></a></td>
 				</tr>
 				<?php } ?>
 			</tbody>
