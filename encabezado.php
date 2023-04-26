@@ -27,6 +27,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="./listar.php">Productos</a></li>
 					<li><a href="./vender.php">Vender</a></li>
+					<li><a href="./ventas.php">Ventas</a></li>
 					<li><a href="./NumeroXProductoVendido.php">Por producto</a></li>
 				</ul>
 			</div>
