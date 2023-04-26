@@ -31,8 +31,8 @@ left: 0px;
 					<th>Precio de compra</th>
 					<th>Precio de venta</th>
 					<th>Existencia</th>
-					<th style='display:none;'>Editar</th>
-					<th style='display:none;'>Eliminar</th>
+					<th>Editar</th>
+					<th>Eliminar</th>
 				</tr>
 			</thead>
 			<tbody>

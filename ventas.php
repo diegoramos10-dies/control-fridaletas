@@ -1,8 +1,9 @@
 <?php include_once "encabezado.php" ?>
 <?php
 include_once "base_de_datos.php";
+
 $sentencia = $base_de_datos->query("
-	SELECT 
+SELECT 
 		ventas.total, 
 		ventas.fecha, 
 		ventas.id, 
@@ -14,8 +15,9 @@ $sentencia = $base_de_datos->query("
 	FROM ventas 
 	INNER JOIN productos_vendidos ON productos_vendidos.id_venta = ventas.id 
 	INNER JOIN productos ON productos.id = productos_vendidos.id_producto 
-    where STR_TO_DATE(ventas.fecha, '%Y-%m-%d') = CURDATE()
+    where ventas.fecha BETWEEN '".$_GET['trip-start']."' AND '".$_GET['trip-end'] ."'
 	GROUP BY ventas.id ORDER BY ventas.id");
+	
 $ventas = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
 $SodasVenta = $base_de_datos->query("SELECT sum(cantidad) as totSod FROM `productos_vendidos` pv JOIN productos pr on pr.id = pv.id_producto WHERE codigo like 'Soda%' or codigo like 'Cerveza%'");
@@ -25,13 +27,26 @@ $TotSod = 0;
 foreach($SumSodas as $SumSoda){
 	$TodSod = $SumSoda->totSod;
 }
+
 ?>
+
+
 
 	<div class="col-xs-12">
 	<br/>
 		<h1>Ventas</h1>
 		<div>
 			<a class="btn btn-success" href="./vender.php">Nueva <i class="fa fa-plus"></i></a>
+		</div>
+		<div style="margin-top:20px">
+			<form  method="GET" action="ventas.php">
+				<label for="start">Desde:</label>
+				<input type="date" id="start" name="trip-start" onchange="this.form.submit()"
+					value="<?php echo $_GET['trip-start']?>">
+				<label for="end">Hasta:</label>
+				<input type="date" id="end" name="trip-end" onchange="this.form.submit()"
+					value="<?php echo date_create('now')->format('Y-m-d'); ?>">
+			</form>
 		</div>
 		<br>
 		<table class="table table-bordered">
@@ -42,7 +57,7 @@ foreach($SumSodas as $SumSoda){
 					<th>Productos vendidos</th>
 					<th>Total</th>
 					<th>Ticket</th>
-					<th style='display:none;'>Eliminar</th>
+					<th>Eliminar</th>
 				</tr>
 			</thead>
 			<tbody>
