@@ -40,7 +40,6 @@ $numXproducto = $sentencia->fetchAll(PDO::FETCH_OBJ);
 				<?php 
 				$totalDia = 0; 
 				foreach($numXproducto as $numXprod){ 
-				$totalDia = $totalDia + $venta->total;
 				?>
 				<tr>
 					<td><?php echo $numXprod->descripcion ?></td>
@@ -51,6 +50,6 @@ $numXproducto = $sentencia->fetchAll(PDO::FETCH_OBJ);
 			</tbody>
 		</table>
 		
-		<div class='divTotal'>Venta del Día -> <b>$ <?php echo $totalDia; ?></b></div>
+		
 	</div>
 <?php include_once "pie.php" ?>

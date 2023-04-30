@@ -2,6 +2,17 @@
 <?php
 include_once "base_de_datos.php";
 
+if(!isset($_GET['eta_one']))
+$HoraInicio = '00:00:00';
+else
+$HoraInicio = $_GET['eta_one'];
+
+if(!isset($_GET['eta_two']))
+$HoraFin = '23:59:59';
+else
+$HoraFin = $_GET['eta_two'];
+
+
 if(!isset($_GET['trip-start']))
 $inicio = (date_create('now')->format('Y-m-d'));
 else
@@ -25,7 +36,7 @@ SELECT
 	FROM ventas 
 	INNER JOIN productos_vendidos ON productos_vendidos.id_venta = ventas.id 
 	INNER JOIN productos ON productos.id = productos_vendidos.id_producto 
-    where ventas.fecha BETWEEN '".$inicio."' AND '".$final ."'
+    where ventas.fecha BETWEEN '".$inicio." ".$HoraInicio."' AND '".$final." ".$HoraFin."'
 	GROUP BY ventas.id ORDER BY ventas.id");
 	
 $ventas = $sentencia->fetchAll(PDO::FETCH_OBJ);
@@ -52,10 +63,12 @@ foreach($SumSodas as $SumSoda){
 			<form  method="GET" action="ventas.php">
 				<label for="start">Desde:</label>
 				<input type="date" id="start" name="trip-start" onchange="this.form.submit()"
-					value="<?php echo $_GET['trip-start']?>">
+					value="<?php echo $inicio?>"> 
+					<input value="<?php echo $HoraInicio ?>" type="time" name="eta_one" onchange="this.form.submit()">
 				<label for="end">Hasta:</label>
 				<input type="date" id="end" name="trip-end" onchange="this.form.submit()"
-					value="<?php echo date_create('now')->format('Y-m-d'); ?>">
+					value="<?php echo $final; ?>"> 
+					<input type="time" value="<?php echo $HoraFin ?>" name="eta_two" onchange="this.form.submit()">
 			</form>
 		</div>
 		<br>
