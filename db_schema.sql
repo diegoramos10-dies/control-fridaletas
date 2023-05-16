@@ -37,3 +37,14 @@ VALUES
 (5, '5', 'Doritos', 8, 5, 100);
 
 # Correcto
+
+ALTER TABLE Orders
+ADD FOREIGN KEY (PersonID) REFERENCES Persons(PersonID);
+
+UPDATE `productos` SET `id_categoria` = '1' WHERE `productos`.`codigo` like 'Paleta%' or `productos`.`codigo` like 'Especial%' 
+
+UPDATE `productos` SET `id_categoria` = '2' WHERE `productos`.`codigo` like 'Soda%' or `productos`.`codigo` like 'Cerveza%'
+
+UPDATE `productos` SET `id_categoria` = '3' WHERE `productos`.`codigo` like 'Dulce%'
+
+UPDATE `productos` SET `id_categoria` = '4' WHERE `productos`.`codigo` =  'null'
