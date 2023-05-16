@@ -20,13 +20,6 @@ SELECT
 	
 $ventas = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
-$SodasVenta = $base_de_datos->query("SELECT sum(cantidad) as totSod FROM `productos_vendidos` pv JOIN productos pr on pr.id = pv.id_producto WHERE codigo like 'Soda%' or codigo like 'Cerveza%'");
-$SumSodas = $SodasVenta->fetchAll(PDO::FETCH_OBJ);
-
-$TotSod = 0;
-foreach($SumSodas as $SumSoda){
-	$TodSod = $SumSoda->totSod;
-}
 
 ?>
 
@@ -99,6 +92,5 @@ foreach($SumSodas as $SumSoda){
 				<?php } ?>
 			</tbody>
 		</table>
-		<div class='divTotal'>Venta del Día -> <b>$ <?php echo $totalDia; ?></b><br/>Sodas Vendidas -> <b><?php echo $TodSod; ?></b></div>
 	</div>
 <?php include_once "pie.php" ?>

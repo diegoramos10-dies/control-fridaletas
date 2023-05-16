@@ -7,6 +7,7 @@ if(
 	!isset($_POST["precioCompra"]) || 
 	!isset($_POST["precioVenta"]) || 
 	!isset($_POST["existencia"]) || 
+	!isset($_POST["categoria"]) || 
 	!isset($_POST["id"])
 ) exit();
 
@@ -19,9 +20,10 @@ $descripcion = $_POST["descripcion"];
 $precioCompra = $_POST["precioCompra"];
 $precioVenta = $_POST["precioVenta"];
 $existencia = $_POST["existencia"];
+$categoria = $_POST["categoria"];
 
-$sentencia = $base_de_datos->prepare("UPDATE productos SET codigo = ?, descripcion = ?, precioCompra = ?, precioVenta = ?, existencia = ? WHERE id = ?;");
-$resultado = $sentencia->execute([$codigo, $descripcion, $precioCompra, $precioVenta, $existencia, $id]);
+$sentencia = $base_de_datos->prepare("UPDATE productos SET codigo = ?, descripcion = ?, precioCompra = ?, precioVenta = ?, existencia = ?, id_categoria = ? WHERE id = ?;");
+$resultado = $sentencia->execute([$codigo, $descripcion, $precioCompra, $precioVenta, $existencia, $categoria, $id]);
 
 if($resultado === TRUE){
 	header("Location: ./listar.php");
