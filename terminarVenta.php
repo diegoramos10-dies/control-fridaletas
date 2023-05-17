@@ -11,9 +11,9 @@ include_once "base_de_datos.php";
 
 $ahora = date("Y-m-d H:i:s");
 
-
-$sentencia = $base_de_datos->prepare("INSERT INTO ventas(total) VALUES (?);");
-$sentencia->execute([$total]);
+echo $_POST['fTextPago'];
+$sentencia = $base_de_datos->prepare("INSERT INTO ventas(total,fPago) VALUES (?,?);");
+$sentencia->execute([$total,$_POST['fTextPago']]);
 
 $sentencia = $base_de_datos->prepare("SELECT id FROM ventas ORDER BY id DESC LIMIT 1;");
 $sentencia->execute();
