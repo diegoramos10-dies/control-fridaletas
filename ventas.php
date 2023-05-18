@@ -1,6 +1,7 @@
 <?php include_once "encabezado.php" ?>
 <?php
 include_once "base_de_datos.php";
+date_default_timezone_set('America/Mexico_City');
 
 if(!isset($_GET['eta_one']))
 $HoraInicio = '00:00:00';
@@ -36,10 +37,18 @@ SELECT
 	FROM ventas 
 	INNER JOIN productos_vendidos ON productos_vendidos.id_venta = ventas.id 
 	INNER JOIN productos ON productos.id = productos_vendidos.id_producto 
-    where ventas.fecha BETWEEN '".$inicio." ".$HoraInicio."' AND '".$final." ".$HoraFin."'
+    where ventas.fecha BETWEEN '".$_GET['trip-start']." ".$_GET['timeStart']."' AND '".$_GET['trip-end']." ".$_GET['timeEnd']."'
 	GROUP BY ventas.id ORDER BY ventas.id");
 	
+	
 $ventas = $sentencia->fetchAll(PDO::FETCH_OBJ);
+
+$senTpago = $base_de_datos->query(
+"SELECT fPago, SUM(total) as totalTpago from ventas where fecha 
+BETWEEN '".$_GET['trip-start']." ".$_GET['timeStart']."' AND '".$_GET['trip-end']." ".$_GET['timeEnd']."' 
+GROUP by fPago");
+$tTpago = $senTpago->fetchAll(PDO::FETCH_OBJ);
+
 
 $SodasVenta = $base_de_datos->query("SELECT sum(cantidad) as totSod FROM `productos_vendidos` pv JOIN productos pr on pr.id = pv.id_producto WHERE codigo like 'Soda%' or codigo like 'Cerveza%'");
 $SumSodas = $SodasVenta->fetchAll(PDO::FETCH_OBJ);
@@ -49,12 +58,21 @@ foreach($SumSodas as $SumSoda){
 	$TodSod = $SumSoda->totSod;
 }
 
-?>
 
-
-
+echo "<div class='divTotal'>
+	<table class='table'>";
+	$TotalV = 0;
+	foreach($tTpago as $ventaXTPago){
+		$TotalV = $TotalV + $ventaXTPago->totalTpago;
+		echo "<tr><td>Venta Total \"$ventaXTPago->fPago\" <b>$ $ventaXTPago->totalTpago </b></td></tr>"; 
+	} ?>
+		<tr><td>Venta Total -> <b><?php echo $TotalV; ?></b></td></tr>
+		<tr><td>Sodas Vendidas -> <b><?php echo $TodSod; ?></b></td></tr>
+	</table>
+	</div>
+	
 	<div class="col-xs-12">
-	<br/>
+	<br/><br/><br/><br/>
 		<h1>Ventas</h1>
 		<div>
 			<a class="btn btn-success" href="./vender.php">Nueva <i class="fa fa-plus"></i></a>
@@ -63,12 +81,12 @@ foreach($SumSodas as $SumSoda){
 			<form  method="GET" action="ventas.php">
 				<label for="start">Desde:</label>
 				<input type="date" id="start" name="trip-start" onchange="this.form.submit()"
-					value="<?php echo $inicio?>"> 
-					<input value="<?php echo $HoraInicio ?>" type="time" name="eta_one" onchange="this.form.submit()">
+					value="<?php echo $_GET['trip-start']?>">
+				<input type="time" id="timeStart" name="timeStart" min="00:00" max="23:59" value="<?php echo $_GET['timeStart'];?>" required onchange="this.form.submit()">
 				<label for="end">Hasta:</label>
 				<input type="date" id="end" name="trip-end" onchange="this.form.submit()"
-					value="<?php echo $final; ?>"> 
-					<input type="time" value="<?php echo $HoraFin ?>" name="eta_two" onchange="this.form.submit()">
+					value="<?php if(isset($_GET['trip-end'])){ echo $_GET['trip-end']; } else { echo date_create('now')->format('Y-m-d'); } ?>">
+				<input type="time" id="timeEnd" name="timeEnd" min="00:00" max="23:59" value="<?php echo $_GET['timeEnd'];?>" required onchange="this.form.submit()">
 			</form>
 		</div>
 		<br>
@@ -85,9 +103,9 @@ foreach($SumSodas as $SumSoda){
 			</thead>
 			<tbody>
 				<?php 
-				$totalDia = 0; 
+				
 				foreach($ventas as $venta){ 
-				$totalDia = $totalDia + $venta->total;
+				
 				?>
 				<tr>
 					<td><?php echo $venta->id ?></td>
@@ -122,6 +140,5 @@ foreach($SumSodas as $SumSoda){
 				<?php } ?>
 			</tbody>
 		</table>
-		<div class='divTotal'>Venta del Día -> <b>$ <?php echo $totalDia; ?></b><br/>Sodas Vendidas -> <b><?php echo $TodSod; ?></b></div>
 	</div>
 <?php include_once "pie.php" ?>

@@ -10,6 +10,9 @@ if($producto === FALSE){
 	exit();
 }
 
+$sentCatego = $base_de_datos->query("SELECT * FROM categorias;");
+$categorias = $sentCatego->fetchAll(PDO::FETCH_OBJ);
+
 ?>
 <?php include_once "encabezado.php" ?>
 	<div class="col-xs-12">
@@ -27,8 +30,18 @@ if($producto === FALSE){
 			<input value="<?php echo $producto->precioVenta ?>" class="form-control" name="precioVenta" required type="number" id="precioVenta" placeholder="Precio de venta">
 
 			<label for="precioCompra">Precio de compra:</label>
-			<input value="<?php echo $producto->precioCompra ?>" class="form-control" name="precioCompra" required type="number" id="precioCompra" placeholder="Precio de compra">
+			<input value="<?php echo $producto->precioCompra;?>" class="form-control" name="precioCompra" required type="number" id="precioCompra" placeholder="Precio de compra">
 
+			<label for="categoria">Categoria:</label>
+			<SELECT class="form-control" name="categoria" required id="categoria" placeholder="Categoria">
+			<?php foreach($categorias as $categoria){ ?>
+				<option value="<?php echo $categoria->id_categoria;?>" 
+					<?php if($categoria->id_categoria == $producto->id_categoria){ ?> selected <?php } ?>
+				>
+					<?php echo $categoria->descripcion;?></option>
+			<?php } ?>
+			</SELECT>
+			
 			<label for="existencia">Existencia:</label>
 			<input value="<?php echo $producto->existencia ?>" class="form-control" name="existencia" required type="number" id="existencia" placeholder="Cantidad o existencia">
 			<br><br><input class="btn btn-info" type="submit" value="Guardar">

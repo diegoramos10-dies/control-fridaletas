@@ -3,6 +3,7 @@ session_start();
 include_once "encabezado.php";
 if (!isset($_SESSION["carrito"])) $_SESSION["carrito"] = [];
 $granTotal = 0;
+$fPago;
 ?>
 <div class="col-xs-12">
 	<h1>Vender</h1>
@@ -51,6 +52,16 @@ $granTotal = 0;
 	<form method="post" action="agregarAlCarrito.php">
 		<label for="codigo">Código de barras:</label>
 		<input autocomplete="off" autofocus class="form-control" name="codigo" required type="text" id="codigo" placeholder="Escribe el código">
+	<br/>
+	<fieldset>
+        <legend>Forma de Pago</legend>
+        <label>
+            <input type="radio" onChange="cambiarFPago('efectivo')" name="fPago" value="efectivo" required <?php if($_GET['fPago'] === "efectivo") { $fPago = "efectivo"; echo "checked='checked'"; } ?>> Efectivo
+        </label>
+        <label>
+            <input type="radio" onChange="cambiarFPago('bancario')" name="fPago" value="bancario" required <?php if($_GET['fPago'] === "bancario") { $fPago = "bancario"; echo "checked='checked'"; } ?>> Bancario
+        </label>
+    </fieldset>
 	</form>
 	<br><br>
 	<table class="table table-bordered">
@@ -89,9 +100,16 @@ $granTotal = 0;
 
 	<h3>Total: <?php echo $granTotal; ?></h3>
 	<form action="./terminarVenta.php" method="POST">
+		<input name="fTextPago" id="fTextPago" value="<?php echo $fPago; ?>" type="hidden" required>
 		<input name="total" type="hidden" value="<?php echo $granTotal; ?>">
 		<button type="submit" class="btn btn-success">Terminar venta</button>
 		<a href="./cancelarVenta.php" class="btn btn-danger">Cancelar venta</a>
 	</form>
 </div>
 <?php include_once "pie.php" ?>
+
+<script>
+function cambiarFPago(valFPago){
+	document.getElementById('fTextPago').value = valFPago;
+}
+</script>

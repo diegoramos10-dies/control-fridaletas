@@ -44,4 +44,4 @@ if ($indice === false) {
     $_SESSION["carrito"][$indice]->cantidad++;
     $_SESSION["carrito"][$indice]->total = $_SESSION["carrito"][$indice]->cantidad * $_SESSION["carrito"][$indice]->precioVenta;
 }
-header("Location: ./vender.php");
+header("Location: ./vender.php?fPago=".$_POST['fPago']);
