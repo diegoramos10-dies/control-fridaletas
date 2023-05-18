@@ -3,6 +3,28 @@
 include_once "base_de_datos.php";
 date_default_timezone_set('America/Mexico_City');
 
+if(!isset($_GET['timeStart']))
+$HoraInicio = '00:00:00';
+else
+$HoraInicio = $_GET['timeStart'];
+
+if(!isset($_GET['timeEnd']))
+$HoraFin = '23:59:59';
+else
+$HoraFin = $_GET['timeEnd'];
+
+
+if(!isset($_GET['trip-start']))
+$inicio = (date_create('now')->format('Y-m-d'));
+else
+$inicio = $_GET['trip-start'];
+
+if(!isset($_GET['trip-end']))
+$final = date_create('now')->format('Y-m-d');
+else
+$final = $_GET['trip-end'];
+
+
 $sentencia = $base_de_datos->query("
 SELECT 
 		ventas.total, 
@@ -16,7 +38,7 @@ SELECT
 	FROM ventas 
 	INNER JOIN productos_vendidos ON productos_vendidos.id_venta = ventas.id 
 	INNER JOIN productos ON productos.id = productos_vendidos.id_producto 
-    where ventas.fecha BETWEEN '".$_GET['trip-start']." ".$_GET['timeStart']."' AND '".$_GET['trip-end']." ".$_GET['timeEnd']."'
+    where ventas.fecha BETWEEN '".$inicio." ".$HoraInicio."' AND '".$final." ".$HoraFin."'
 	GROUP BY ventas.id ORDER BY ventas.id");
 	
 	
@@ -24,7 +46,7 @@ $ventas = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
 $senTpago = $base_de_datos->query(
 "SELECT fPago, SUM(total) as totalTpago from ventas where fecha 
-BETWEEN '".$_GET['trip-start']." ".$_GET['timeStart']."' AND '".$_GET['trip-end']." ".$_GET['timeEnd']."' 
+BETWEEN '".$inicio." ".$HoraInicio."' AND '".$final." ".$HoraFin."' 
 GROUP by fPago");
 $tTpago = $senTpago->fetchAll(PDO::FETCH_OBJ);
 
